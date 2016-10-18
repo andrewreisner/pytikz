@@ -12,6 +12,15 @@ class wrapper(object):
         return self.rep
 
 
+class raw(wrapper):
+
+    def __init__(self, id, rstr):
+        self.rstr = rstr
+
+    def compile(self):
+        self.rep = self.rstr
+
+
 class grid(wrapper):
 
     def __init__(self, id, ll, ur):
@@ -88,10 +97,16 @@ class line(wrapper):
         attrs = self.attr[:]
         if self.lw is not None:
             attrs.append('line width=%s' %(self.lw))
-        self.rep += '\\draw[%s] (%f, %f) -- %s (%f, %f);' %(','.join(attrs),
-                                                       self.p0[0], self.p0[1],
-                                                            self.substr,
-                                                       self.p1[0], self.p1[1])
+        if isinstance(self.p0, node):
+            self.rep += '\\draw[%s] (%d) -- %s (%d);' %(','.join(attrs),
+                                                        self.p0.id,
+                                                        self.substr,
+                                                        self.p1.id)
+        else:
+            self.rep += '\\draw[%s] (%f, %f) -- %s (%f, %f);' %(','.join(attrs),
+                                                           self.p0[0], self.p0[1],
+                                                                self.substr,
+                                                           self.p1[0], self.p1[1])
 
 
 
@@ -115,5 +130,7 @@ class arrow(line):
     def compile(self):
         self.substr = ''
         for _,nd in self.nodes.iteritems():
-            self.substr += ' node [%s] {%s} ' % (','.join(nd.attr), nd.label)
+            attrs = nd.attr[:]
+            attrs.append('scale=%f' %(nd.scale))
+            self.substr += ' node [%s] {%s} ' % (','.join(attrs), nd.label)
         super(arrow,self).compile()
