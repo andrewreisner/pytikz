@@ -6,6 +6,7 @@ class tikz_gen(object):
         self.tobj = []
         self.cid = 0
         self.rep = ''
+        self.scale = 1
 
     def __getattr__(self, attr):
         import wrappers
@@ -21,7 +22,7 @@ class tikz_gen(object):
 
     def compile(self):
         self.rep = ''
-        self.rep += '\\begin{tikzpicture}\n'
+        self.rep += '\\begin{{tikzpicture}}[scale={0},every node/.style={{scale={0}}}]\n'.format(self.scale)
         for obj in self.tobj:
             self.rep += str(obj) + '\n'
         self.rep += '\\end{tikzpicture}\n'

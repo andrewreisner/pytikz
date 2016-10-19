@@ -57,6 +57,13 @@ class node(wrapper):
         self.rep += '] (%d)%s{%s};' %(self.id, pstr, self.label)
 
 
+class text(node):
+
+    def __init__(self, id, pos=None, label=''):
+        super(text, self).__init__(id, pos, label)
+        self.attr = []
+
+
 class cnode(node):
 
     def __init__(self, id, pos=None, label=''):
@@ -80,6 +87,23 @@ class circle(wrapper):
             attrs.append('line width=%s' %(self.lw))
         self.rep += '\\draw[%s] (%f, %f) circle [radius=%f];' %(','.join(attrs),
                                                                 self.pos[0], self.pos[1], self.radius)
+
+
+
+class rectangle(wrapper):
+
+    def __init__(self, id, ll, ur):
+        super(rectangle, self).__init__(id)
+        self.ll = ll
+        self.ur = ur
+        self.attr = []
+
+    def compile(self):
+        self.rep = ''
+        attrs = self.attr[:]
+        self.rep += '\\draw[{attr}] ({ll[0]},{ll[1]}) rectangle ({ur[0]},{ur[1]});'.format(attr=','.join(attrs),
+                                                                                           ll=self.ll,
+                                                                                           ur=self.ur)
 
 
 class line(wrapper):
