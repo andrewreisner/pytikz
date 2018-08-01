@@ -58,8 +58,22 @@ def get_corners(gen, grd):
     return ret
 
 
-def scope(gen, shift, slant):
-    gen.raw('\\begin{{scope}}[xshift={0},yshift={1},every node/.append style={{yslant={3},xslant={2}}},yslant={3},xslant={2}]'.format(*(shift+slant)))
+class scope:
+
+    def __init__(self, gen, shift, slant):
+        self.gen = gen
+        self.shift = shift
+        self.slant = slant
+
+    def __enter__(self):
+        gen = self.gen
+        shift = self.shift
+        slant = self.slant
+        gen.raw('\\begin{{scope}}[xshift={0},yshift={1},every node/.append style={{yslant={3},xslant={2}}},yslant={3},xslant={2}]'.format(*(shift+slant)))
+
+    def __exit__(self, *args):
+        self.gen.raw('\\end{scope}')
+        return True
 
 
 def draw_grid(gen, grd):
@@ -85,28 +99,27 @@ def draw_grid(gen, grd):
 def draw_seq(gen, shift, slant):
     cgrid = topo(13)
     for i in range(2):
-        scope(gen, shift, slant)
-        draw_grid(gen, cgrid)
-        gen.raw('\\end{scope}')
+        with scope(gen, shift, slant):
+            draw_grid(gen, cgrid)
         shift[1] -= 130
         cgrid = refine(cgrid)
 
 
 def draw_gather(gen, shift, slant):
     grd = topo(4)
-    scope(gen, shift, slant)
-    pgrid = draw_grid(gen, grd)
-    corners0 = get_corners(gen, pgrid)
-    gen.raw('\\end{scope}')
+    corners0 = None
+    with scope(gen, shift, slant):
+        pgrid = draw_grid(gen, grd)
+        corners0 = get_corners(gen, pgrid)
     shift[1] -= 130
 
     grd = topo()
     grd.nlocal[0,0] = 4
     grd.nlocal[0,1] = 4
-    scope(gen, shift, slant)
-    pgrid = draw_grid(gen, grd)
-    corners1 = get_corners(gen, pgrid)
-    gen.raw('\\end{scope}')
+    corners1 = None
+    with scope(gen, shift, slant):
+        pgrid = draw_grid(gen, grd)
+        corners1 = get_corners(gen, pgrid)
 
     arr_scale = 1.5
     gather_arrow = gen.arrow(corners0[2], corners1[2])
