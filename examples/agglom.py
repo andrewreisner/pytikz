@@ -55,10 +55,10 @@ hx, hy = geth(grd1)
 hx /= 4.
 hy /= 4.
 clw = '.08cm'
-gen.circle((mdx - hx, mdy-hy), hx).lw = clw
-gen.circle((mdx + hx, mdy + hy), hx).lw = clw
-gen.circle((mdx + hx, mdy - hy), hx).lw = clw
-gen.circle((mdx - hx, mdy + hy), hx).lw = clw
+# gen.circle((mdx - hx, mdy-hy), hx).lw = clw
+# gen.circle((mdx + hx, mdy + hy), hx).lw = clw
+# gen.circle((mdx + hx, mdy - hy), hx).lw = clw
+# gen.circle((mdx - hx, mdy + hy), hx).lw = clw
 
 grd2 = gen.grid((0,0), (4,4))
 gather_arr = gen.arrow((grd1.bbox[0][0], grd1.bbox[0][1]),
@@ -72,10 +72,10 @@ hx, hy = geth(grd2)
 hx /= 8.
 hy /= 8.
 
-gen.circle((mdx-3*hx, mdy-hy), hx).lw = clw
-gen.circle((mdx-3*hx, mdy+3*hy), hx).lw = clw
-gen.circle((mdx+hx, mdy+3*hy), hx).lw = clw
-gen.circle((mdx+hx, mdy-hy), hx).lw = clw
+# gen.circle((mdx-3*hx, mdy-hy), hx).lw = clw
+# gen.circle((mdx-3*hx, mdy+3*hy), hx).lw = clw
+# gen.circle((mdx+hx, mdy+3*hy), hx).lw = clw
+# gen.circle((mdx+hx, mdy-hy), hx).lw = clw
 
 draw_snodes(gen, (grd2.bbox[0][0], grd2.bbox[1][1]), [0,1,4,5])
 draw_snodes(gen, (mdx, grd2.bbox[1][1]), [2,3,6,7])
